@@ -10,7 +10,7 @@ argo-cd:
       server.insecure: true
   server:
     service:
-      type: LoadBalancer
+      type: ClusterIP
     ingress:
       enabled: false
       # ingressClassName: "nginx"

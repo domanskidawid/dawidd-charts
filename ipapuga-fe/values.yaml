@@ -1,6 +1,6 @@
 cloudnative-backend:
   service:
-    type: LoadBalancer
+    type: ClusterIP
   replicaCount: 1
   containerPort: 80
   image:
