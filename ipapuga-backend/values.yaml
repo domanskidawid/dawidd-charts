@@ -1,0 +1,81 @@
+cloudnative-backend:
+  replicaCount: 1
+  containerPort: 8080
+  image:
+    repository: ghcr.io/parrotwings/ipapuga-backend
+    pullPolicy: IfNotPresent
+    tag: main-536ececa
+
+  nameOverride: "ipapuga-backend"
+  fullnameOverride: "ipapuga-backend"
+
+  imagePullSecrets:
+    - name: regcred
+
+  env:
+    - name: DATASOURCE_PASSWORD
+      value: >-
+        rSFF#F3j4Cm8goa
+
+  resources:
+    requests:
+      memory: "128Mi"
+    limits:
+      memory: "512Mi"
+  configMap:
+    application.yaml:
+      ipapuga:
+        generate-data-on-startup: false
+      spring:
+        jpa:
+          properties:
+            hibernate:
+              jdbc:
+                lob:
+                  non_contextual_creation: true
+        liquibase:
+          enabled: true
+          change-log: "liquibase/changelog/changelog-master.xml"
+        application.name: ipapuga
+        datasource:
+          driver-class-name: org.postgresql.Driver
+          url: jdbc:postgresql://snazzy-merman-7770.7tc.aws-eu-central-1.cockroachlabs.cloud:26257/ipapuga_dev
+          username: ipapuga_dev
+          password: ${DATASOURCE_PASSWORD}
+      management:
+        health:
+          probes:
+            enabled: true
+        endpoints:
+          web:
+            exposure:
+              include:
+                - health
+                - info
+                - prometheus
+      logging:
+        level:
+          root: info
+          org.hibernate: info
+          org.hibernate.SQL: info
+          org.springframework: info
+          org.hibernate.engine.jdbc.env.internal.LobCreatorBuilderImpl: error
+  volumeMounts:
+    - name: ipapuga-backend-cm
+      mountPath: /opt/app/application.yaml
+      subPath: application.yaml
+  volumes:
+    - name: ipapuga-backend-cm
+      configMap:
+        name: ipapuga-backend
+  ingress:
+    enabled: true
+    className: "traefik"
+    hosts:
+      - host: "ipapuga-backend.k8s.kperczynski.click"
+        paths:
+          - path: /
+            pathType: Prefix
+    tls:
+      - hosts:
+          - ipapuga-backend.k8s.kperczynski.click

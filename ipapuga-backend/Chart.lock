@@ -1,0 +1,6 @@
+dependencies:
+- name: cloudnative-backend
+  repository: file://../cloudnative-backend
+  version: 0.1.0
+digest: sha256:78b3d2cf08db4136a8f0c59e4c5dfc6df81bc7b5b8c695bb805d780ada990793
+generated: "2024-10-09T22:24:07.445687+02:00"

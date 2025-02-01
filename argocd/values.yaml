@@ -1,0 +1,24 @@
+global:
+  image:
+    tag: "v2.8.0"
+
+argo-cd:
+  nameOverride: argocd
+  fullnameOverride: "argocd"
+  configs:
+    params:
+      server.insecure: true
+  server:
+    service:
+      type: LoadBalancer
+    ingress:
+      enabled: false
+      # ingressClassName: "nginx"
+      # hosts:
+      #   - argocd.k8s.kperczynski.click
+      paths:
+        - /
+      pathType: Prefix
+      https: false
+      annotations:
+        nginx.ingress.kubernetes.io/force-ssl-redirect: "true"

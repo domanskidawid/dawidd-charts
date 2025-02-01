@@ -1,0 +1,21 @@
+{{- if .Values.configMap -}}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{include "cloudnative-backend.fullname" .}}
+  labels:
+    {{- include "cloudnative-backend.labels" . | nindent 4}}
+data:
+{{- range $path, $config := .Values.configMap }}
+{{- if hasSuffix ".yaml" $path }}
+  {{ $path }}: |
+    {{- toYaml $config | nindent 4 -}}
+{{- else if hasSuffix ".json" $path }}
+  {{ $path }}: |
+    {{- toPrettyJson $config | nindent 4 -}}
+{{- else }}
+  {{ $path }}: |
+  {{- toString $config | nindent 4 -}}
+{{- end -}}
+{{- end -}}
+{{- end -}}
