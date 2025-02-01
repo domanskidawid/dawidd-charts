@@ -1,4 +1,6 @@
 cloudnative-backend:
+  service:
+    type: LoadBalancer
   replicaCount: 1
   containerPort: 80
   image:
@@ -53,7 +55,7 @@ cloudnative-backend:
       mountPath: /etc/nginx/conf.d/default.conf
       subPath: nginx.conf
   ingress:
-    enabled: true
+    enabled: false
     className: "traefik"
     hosts:
       - host: "ipapuga.k8s.kperczynski.click"
