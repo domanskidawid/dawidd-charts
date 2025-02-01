@@ -55,13 +55,13 @@ cloudnative-backend:
       mountPath: /etc/nginx/conf.d/default.conf
       subPath: nginx.conf
   ingress:
-    enabled: false
-    className: "traefik"
+    enabled: true
+    className: "alb"
     hosts:
-      - host: "ipapuga.k8s.kperczynski.click"
+      - host: "ipapuga.dawid.kperczynski.click"
         paths:
           - path: /
             pathType: Prefix
     tls:
       - hosts:
-          - ipapuga.k8s.kperczynski.click
+          - ipapuga.dawid.kperczynski.click
